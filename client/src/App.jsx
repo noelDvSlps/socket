@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
+// import io from "socket.io-client";
+// const socket = io.connect("http://localhost:3001");
 
 function App() {
   const joinRoom = () => {
@@ -18,9 +18,9 @@ function App() {
   const [room, setRoom] = useState("");
 
   useEffect(() => {
-    socket.on("receive-message", (data) => {
-      setMessageReceived(data.message);
-    });
+    // socket.on("receive-message", (data) => {
+    //   setMessageReceived(data.message);
+    // });
   }, []);
   return (
     <div>
