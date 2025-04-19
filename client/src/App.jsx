@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
-// const socket = io.connect("https://socket-e3rd.onrender.com");
+// const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://socket-e3rd.onrender.com");
 
 socket.on("connect", function () {
   if (socket.connected) {
