@@ -51,27 +51,31 @@ function App() {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Room Number..."
-        onChange={(e) => setRoom(e.target.value)}
-        value={room}
-      />
-      <button onClick={joinRoom}> Join room</button>
-      <input
-        type="text"
-        placeholder="Message..."
-        onChange={(e) => setMessage(e.target.value)}
-        value={message}
-      />
-      <button onClick={() => sendMessage(message)}> Send Message</button>
-      {/* <h2>{messageReceived}</h2> */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          // border: "solid",
+          // height: "80vh",
+          width: "99%",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Room Number..."
+          onChange={(e) => setRoom(e.target.value)}
+          value={room}
+        />
+        <button onClick={joinRoom}> Join room</button>
+      </div>
+
       <div
         id="scrollableDiv"
         style={{
           border: "solid",
-          height: "30vh",
-          width: "80vw",
+          height: "80vh",
+          width: "99%",
           overflowY: "scroll",
           scroll,
         }}
@@ -104,6 +108,37 @@ function App() {
           </ul>
         }
       </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          // border: "solid",
+          // height: "80vh",
+          width: "99%",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Message..."
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+          style={{
+            width: "80%",
+          }}
+        />
+        <button
+          onClick={() => sendMessage(message)}
+          style={{
+            width: "20%",
+          }}
+        >
+          {" "}
+          Send Message
+        </button>
+      </div>
+
+      {/* <h2>{messageReceived}</h2> */}
     </div>
   );
 }
