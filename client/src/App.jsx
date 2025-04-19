@@ -3,14 +3,6 @@ import io from "socket.io-client";
 // const socket = io.connect("http://localhost:3001");
 const socket = io.connect("https://socket-e3rd.onrender.com");
 
-socket.on("connect", function () {
-  if (socket.connected) {
-    console.log("check 2", socket.connected);
-  } else {
-    alert("disconnected, please join again");
-  }
-});
-
 function App() {
   // Get the scrollable div element
   let scrollableDiv = document.getElementById("scrollableDiv");
@@ -19,6 +11,10 @@ function App() {
   const [messageReceived, setMessageReceived] = useState([]);
   const [room, setRoom] = useState("");
   const [currentRoom, setCurrentRoom] = useState("");
+
+  const isSocketConnected = () => {
+    return socket.connected;
+  };
 
   // Function to scroll to the bottom of the div
   const scrollToBottom = () => {
@@ -36,6 +32,10 @@ function App() {
   };
 
   const sendMessage = (message) => {
+    if (!isSocketConnected()) {
+      alert("Disconnected");
+      return;
+    }
     try {
       if (message.trim() === "") {
         return;
@@ -50,11 +50,14 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("useeffect");
+    // console.log(messageReceived);
     socket.on("receive-message", (data) => {
       console.log(`received ${room}`);
       console.log(data);
       setMessageReceived(data);
     });
+    console.log(isSocketConnected());
   }, [room]);
 
   return (
@@ -89,7 +92,7 @@ function App() {
         }}
       >
         {
-          <ul style={{ listStyle: "none" }}>
+          <ul style={{ listStyle: "none", padding: "2px" }}>
             {messageReceived.map((data, i) => {
               // setTimeout(() => {
               //   scrollToBottom();
