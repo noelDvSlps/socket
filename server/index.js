@@ -21,15 +21,22 @@ let allData = [];
 io.on("connection", (socket) => {
   // console.log(`User connected: ${socket.id}`);
 
-  socket.on("join-room", (data) => {
-    socket.join(data);
+  socket.on("join-room", (room) => {
+    console.log(room);
+    socket.join(room);
   });
 
   socket.on("send-message", (data) => {
     console.log(`User connected: ${socket.id}`);
+    console.log(data);
     allData = [...allData, data];
     // socket.to(data.room).emit("receive-message", allData);
-    io.sockets.in(data.room).emit("receive-message", allData);
+    io.sockets.in(data.room).emit(
+      "receive-message",
+      allData.filter((item) => {
+        return item.room === data.room;
+      })
+    );
   });
 });
 

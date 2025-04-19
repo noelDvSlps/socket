@@ -7,33 +7,47 @@ function App() {
   // Get the scrollable div element
   let scrollableDiv = document.getElementById("scrollableDiv");
 
+  const [message, setMessage] = useState("");
+  const [messageReceived, setMessageReceived] = useState([]);
+  const [room, setRoom] = useState("");
+  const [currentRoom, setCurrentRoom] = useState("");
+
   // Function to scroll to the bottom of the div
   const scrollToBottom = () => {
     scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
   };
   const joinRoom = () => {
-    if (room !== "") {
+    if (room !== "" && room !== currentRoom) {
+      setCurrentRoom(room);
       socket.emit("join-room", room);
+      sendMessage();
+    }
+    if (room === currentRoom) {
+      alert("You are already in this room.");
     }
   };
 
   const sendMessage = (message) => {
+    try {
+      if (message.trim() === "") {
+        return;
+      }
+    } catch (error) {
+      console.log("null");
+    }
+
     const userId = socket.id;
     socket.emit("send-message", { message, room, userId });
+    setMessage("");
   };
-
-  const [message, setMessage] = useState("");
-  const [messageReceived, setMessageReceived] = useState([]);
-  const [room, setRoom] = useState("");
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
-      console.log("received");
+      console.log(`received ${room}`);
       console.log(data);
-      // setMessageReceived(data.message);
       setMessageReceived(data);
     });
-  }, []);
+  }, [room]);
 
   return (
     <div>
@@ -41,12 +55,14 @@ function App() {
         type="text"
         placeholder="Room Number..."
         onChange={(e) => setRoom(e.target.value)}
+        value={room}
       />
       <button onClick={joinRoom}> Join room</button>
       <input
         type="text"
         placeholder="Message..."
         onChange={(e) => setMessage(e.target.value)}
+        value={message}
       />
       <button onClick={() => sendMessage(message)}> Send Message</button>
       {/* <h2>{messageReceived}</h2> */}
@@ -73,8 +89,14 @@ function App() {
                     textAlign: data.userId === socket.id ? "end" : "start",
                   }}
                 >
-                  {data.userId === socket.id ? "Me:" : data.userId + ":"}{" "}
-                  {data.message}
+                  {data.userId === socket.id
+                    ? data.message
+                      ? `Me: ${data.message}`
+                      : null
+                    : data.message
+                    ? `${data.userId}: ${data.message}`
+                    : `${data.userId} has joined`}
+
                   {scrollToBottom()}
                 </li>
               );
