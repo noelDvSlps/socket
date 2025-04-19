@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-// const socket = io.connect("http://localhost:3001");
-const socket = io.connect("https://socket-e3rd.onrender.com");
+const socket = io.connect("http://localhost:3001");
+// const socket = io.connect("https://socket-e3rd.onrender.com");
+
+socket.on("connect", function () {
+  if (socket.connected) {
+    console.log("check 2", socket.connected);
+  } else {
+    alert("disconnected, please join again");
+  }
+});
 
 function App() {
   // Get the scrollable div element
