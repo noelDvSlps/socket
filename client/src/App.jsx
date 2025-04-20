@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
+let socket = null;
+try {
+  socket = io.connect("http://localhost:3001");
+} catch (error) {
+  socket = io.connect("https://socket-e3rd.onrender.com");
+}
 // const socket = io.connect("http://localhost:3001");
-const socket = io.connect("https://socket-e3rd.onrender.com");
+// const socket = io.connect("https://socket-e3rd.onrender.com");
 
 function App() {
   // Get the scrollable div element
@@ -52,12 +58,13 @@ function App() {
   useEffect(() => {
     console.log("useeffect");
     // console.log(messageReceived);
-    socket.on("receive-message", (data) => {
-      console.log(`received ${room}`);
-      console.log(data);
-      setMessageReceived(data);
-    });
-    console.log(isSocketConnected());
+    setTimeout(() => {
+      socket.on("receive-message", (data) => {
+        console.log(`received ${room}`);
+        console.log(data);
+        setMessageReceived(data);
+      });
+    }, 1000);
   }, [room]);
 
   return (
