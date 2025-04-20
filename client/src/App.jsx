@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import io from "socket.io-client";
 let socket = null;
 try {
-  socket = io.connect("http://localhost:3001");
-} catch (error) {
   socket = io.connect("https://socket-e3rd.onrender.com");
+} catch (error) {
+  alert("connecting to local");
+  socket = io.connect("http://localhost:3001");
 }
 // const socket = io.connect("http://localhost:3001");
 // const socket = io.connect("https://socket-e3rd.onrender.com");
